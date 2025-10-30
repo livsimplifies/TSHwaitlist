@@ -11,13 +11,17 @@
   <section class="waitlist-section">
     <div class="waitlist-container">
       <h1>Join the waitlist!</h1>
-      <p>Be the first to access <strong>The Simplify Hub</strong> before public launch.</p>
+      <p class="waitlist-subtext">
+        Be the first to access <strong>The Simplify Hub</strong> before public launch.
+      </p>
+
       <form id="waitlist-form">
         <input type="text" name="firstName" placeholder="First name" required>
         <input type="email" name="email" placeholder="Email address" required>
         <button type="submit">Join Now!</button>
       </form>
-      <div id="thank-you-message" class="hidden">
+
+      <div id="thank-you-message">
         <h2>You're on the waitlist!</h2>
         <p>Keep an eye on your emails over the coming days to get BTS peeks and to know when we launch!</p>
         <p class="signature">— LivSimplifies</p>
@@ -28,13 +32,25 @@
   <script>
     const form = document.getElementById('waitlist-form');
     const thankYou = document.getElementById('thank-you-message');
+    const heading = document.querySelector('h1');
+    const subtext = document.querySelector('.waitlist-subtext');
 
-   form.addEventListener('submit', (e) => {
-  e.preventDefault();
+    // hide thank-you by default
+    thankYou.style.display = 'none';
 
-  // hide everything except thank-you message
-  document.querySelector('h1').classList.add('hidden');
-  document.querySelector('p').classList.add('hidden');
-  form.classList.add('hidden');
-  thankYou.classList.remove('hidden');
-});
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // hide heading, subtext, and form
+      heading.style.display = 'none';
+      subtext.style.display = 'none';
+      form.style.display = 'none';
+
+      // show thank-you with fade-in
+      thankYou.style.display = 'flex';
+      thankYou.style.opacity = 0;
+      setTimeout(() => (thankYou.style.opacity = 1), 50);
+    });
+  </script>
+</body>
+
