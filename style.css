@@ -90,3 +90,39 @@ button:hover {
   font-style: italic;
   color: #3A3A3A;
 }
+/* Center everything perfectly */
+.waitlist-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #A7CBB7; /* Sage */
+  text-align: center;
+}
+
+/* Thank-you fade + vertical centering */
+#thank-you-message {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+#thank-you-message h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+#thank-you-message p {
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.signature {
+  font-style: italic;
+  color: #3A3A3A;
+}
