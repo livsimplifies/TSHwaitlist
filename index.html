@@ -39,4 +39,59 @@
   </section>
 
   <!-- flodesk script -->
-  <
+  <script src="https://assets.flodesk.com/universal.js" async></script>
+
+  <script>
+    window.addEventListener("load", () => {
+
+      // --- initialise flodesk ---
+      if (window.fd) {
+        window.fd('form', {
+          formId: '68f1f0138b74c8d741ecd499',
+          containerEl: '#fd-form-68f1f0138b74c8d741ecd499'
+        });
+      }
+
+      // --- elements ---
+      const form = document.getElementById('waitlist-form');
+      const thankYou = document.getElementById('thank-you-message');
+      const heading = document.querySelector('h1');
+      const subtext = document.querySelector('.waitlist-subtext');
+
+      // hide thank-you immediately on load
+      thankYou.style.display = "none";
+
+      // --- submit handler ---
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const first = form.firstName.value.trim();
+        const email = form.email.value.trim();
+
+        // send to flodesk iframe when ready
+        const sendTimer = setInterval(() => {
+          const iframe = document.querySelector('#flodesk-hidden iframe');
+          if (!iframe) return;
+          const doc = iframe.contentDocument || iframe.contentWindow.document;
+          const emailField = doc.querySelector('input[type="email"]');
+          const nameField = doc.querySelector('input[name="name"], input[name="first_name"]');
+          const submitBtn = doc.querySelector('button, input[type="submit"]');
+          if (emailField && submitBtn) {
+            emailField.value = email;
+            if (nameField) nameField.value = first;
+            submitBtn.click();
+            clearInterval(sendTimer);
+          }
+        }, 300);
+
+        // --- swap to thank-you view ---
+        heading.style.display = "none";
+        subtext.style.display = "none";
+        form.style.display = "none";
+        thankYou.style.display = "block";
+      });
+    });
+  </script>
+</body>
+</html>
+
