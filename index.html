@@ -21,7 +21,7 @@
         <button type="submit">Join Now!</button>
       </form>
 
-      <div id="thank-you-message">
+      <div id="thank-you-message" class="hidden">
         <h2>You're on the waitlist!</h2>
         <p>Keep an eye on your emails over the coming days to get BTS peeks and to know when we launch!</p>
         <p class="signature">LivSimplifies</p>
@@ -32,11 +32,12 @@
   <script>
     const form = document.getElementById('waitlist-form');
     const container = document.querySelector('.waitlist-container');
+    const thankYou = document.getElementById('thank-you-message');
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      // Switch the container into thank-you mode
       container.classList.add('thankyou');
+      thankYou.classList.remove('hidden');
     });
   </script>
 </body>
