@@ -1,37 +1,60 @@
+/* ===== Base ===== */
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   background-color: #FFF9F6; /* Soft Cream */
   color: #3A3A3A; /* Charcoal */
+}
+
+/* ===== Layout ===== */
+.waitlist-section {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-}
-
-.waitlist-section {
-  width: 100%;
   background-color: #A7CBB7; /* Sage Green */
-  padding: 80px 20px;
   text-align: center;
+  padding: 40px 20px;
 }
 
 .waitlist-container {
-  max-width: 600px;
-  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 100%;
+  max-width: 640px;
 }
 
+/* ===== Typography ===== */
 h1 {
   font-family: 'Playfair Display', serif;
   font-size: 2.4rem;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
-p {
+.waitlist-subtext {
   font-size: 1rem;
   margin-bottom: 30px;
 }
 
+#thank-you-message h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+}
+
+#thank-you-message p {
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.signature {
+  font-style: italic;
+}
+
+/* ===== Form ===== */
 form {
   display: flex;
   flex-wrap: wrap;
@@ -44,11 +67,10 @@ input {
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
   width: 220px;
-  background-color: #FFF9F6; /* Cream */
+  background-color: #FFF9F6;
   color: #3A3A3A;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 button {
@@ -59,70 +81,44 @@ button {
   border-radius: 25px;
   padding: 12px 24px;
   cursor: pointer;
-  font-family: 'Poppins', sans-serif;
   transition: all 0.2s ease;
 }
 
 button:hover {
   background-color: #F9E59A;
+  transform: scale(1.03);
 }
 
-.hidden {
-  display: none;
-}
-
-#thank-you-message {
-  margin-top: 20px;
-}
-
-#thank-you-message h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-}
-
-#thank-you-message p {
-  margin-bottom: 8px;
-  font-size: 1rem;
-}
-
-.signature {
-  font-style: italic;
-  color: #3A3A3A;
-}
-/* Center everything perfectly */
-.waitlist-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #A7CBB7; /* Sage */
-  text-align: center;
-}
-
-/* Thank-you fade + vertical centering */
+/* ===== Thank-you state ===== */
 #thank-you-message {
   display: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 60vh;
-  opacity: 0;
-  transition: opacity 0.6s ease;
+  min-height: 40vh;
 }
 
-#thank-you-message h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+/* Hide original content on thank-you */
+.thankyou h1,
+.thankyou .waitlist-subtext,
+.thankyou form {
+  display: none;
 }
 
-#thank-you-message p {
-  font-size: 1rem;
-  margin-bottom: 6px;
+/* Show thank-you message centered */
+.thankyou #thank-you-message {
+  display: flex;
+  opacity: 1;
 }
 
-.signature {
-  font-style: italic;
-  color: #3A3A3A;
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2rem;
+  }
+  input {
+    width: 100%;
+  }
 }
