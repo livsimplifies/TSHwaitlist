@@ -29,11 +29,12 @@
     const form = document.getElementById('waitlist-form');
     const thankYou = document.getElementById('thank-you-message');
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      form.classList.add('hidden');
-      thankYou.classList.remove('hidden');
-    });
-  </script>
-</body>
-</html>
+   form.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  // hide everything except thank-you message
+  document.querySelector('h1').classList.add('hidden');
+  document.querySelector('p').classList.add('hidden');
+  form.classList.add('hidden');
+  thankYou.classList.remove('hidden');
+});
