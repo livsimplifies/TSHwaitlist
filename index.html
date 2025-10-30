@@ -10,6 +10,7 @@
 <body>
   <section class="waitlist-section">
     <div class="waitlist-container">
+
       <h1>Join the waitlist!</h1>
       <p class="waitlist-subtext">
         Be the first to access <strong>The Simplify Hub</strong> before public launch.
@@ -22,28 +23,30 @@
         <button type="submit">Join Now!</button>
       </form>
 
-      <!-- Hidden Flodesk form -->
+      <!-- Hidden Flodesk embed -->
       <div id="flodesk-hidden" style="visibility:hidden;height:0;overflow:hidden;">
         <div id="fd-form-68f1f0138b74c8d741ecd499"></div>
       </div>
 
+      <!-- Thank-you screen -->
       <div id="thank-you-message" class="hidden">
         <h2>You're on the waitlist!</h2>
         <p>Keep an eye on your emails over the coming days to get BTS peeks and to know when we launch!</p>
         <p class="signature">LivSimplifies</p>
       </div>
+
     </div>
   </section>
 
-  <!-- Flodesk script -->
+  <!-- Flodesk loader -->
   <script src="https://assets.flodesk.com/universal.js" async></script>
   <script>
+    // initialise Flodesk
     window.fd('form', {
       formId: '68f1f0138b74c8d741ecd499',
       containerEl: '#fd-form-68f1f0138b74c8d741ecd499'
     });
 
-    // Link your custom form to Flodesk
     const form = document.getElementById('waitlist-form');
     const container = document.querySelector('.waitlist-container');
     const thankYou = document.getElementById('thank-you-message');
@@ -54,25 +57,33 @@
       const firstName = form.querySelector('input[name="firstName"]').value;
       const email = form.querySelector('input[name="email"]').value;
 
-      // Wait for Flodesk to load, then inject data
-      const interval = setInterval(() => {
+      // send to hidden Flodesk form
+      const sendToFlodesk = () => {
         const iframe = document.querySelector('#flodesk-hidden iframe');
-        if (iframe) {
-          const fdDoc = iframe.contentDocument || iframe.contentWindow.document;
-          const emailField = fdDoc.querySelector('input[type="email"]');
-          const nameField = fdDoc.querySelector('input[name="name"], input[name="first_name"]');
-          const submitBtn = fdDoc.querySelector('button, input[type="submit"]');
+        if (!iframe) return false;
 
-          if (emailField && submitBtn) {
-            emailField.value = email;
-            if (nameField) nameField.value = firstName;
-            submitBtn.click();
-            clearInterval(interval);
-          }
+        const fdDoc = iframe.contentDocument || iframe.contentWindow.document;
+        const emailField = fdDoc.querySelector('input[type="email"]');
+        const nameField = fdDoc.querySelector('input[name="name"], input[name="first_name"]');
+        const submitBtn = fdDoc.querySelector('button, input[type="submit"]');
+
+        if (emailField && submitBtn) {
+          emailField.value = email;
+          if (nameField) nameField.value = firstName;
+          submitBtn.click();
+          return true;
         }
+        return false;
+      };
+
+      // wait until the hidden form is ready
+      let tries = 0;
+      const timer = setInterval(() => {
+        tries++;
+        if (sendToFlodesk() || tries > 20) clearInterval(timer);
       }, 300);
 
-      // Show thank-you
+      // switch to thank-you screen
       container.classList.add('thankyou');
       thankYou.classList.remove('hidden');
     });
