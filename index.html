@@ -11,101 +11,56 @@
   <section class="waitlist-section">
     <div class="waitlist-container">
 
-      <!-- visible form -->
       <h1>Join the waitlist!</h1>
       <p class="waitlist-subtext">
         Be the first to access <strong>The Simplify Hub</strong> before public launch.
       </p>
 
-      <form id="waitlist-form">
-        <input type="text" name="firstName" placeholder="First name" required>
-        <input type="email" name="email" placeholder="Email address" required>
+      <!-- Visible form -->
+      <form id="waitlist-form" method="POST" action="https://flodesk.com/forms/f-010dda786334445ebf3091e300a7e9b8/submit">
+        <input type="text" name="firstName" placeholder="First name" autocomplete="given-name" required>
+        <input type="email" name="email" placeholder="Email address" autocomplete="email" required>
         <button type="submit">Join Now!</button>
       </form>
 
-      <!-- thank-you message -->
-      <div id="thank-you-message">
+      <!-- Thank-you -->
+      <div id="thank-you-message" style="display:none;">
         <h2>You're on the waitlist!</h2>
         <p>Keep an eye on your emails over the coming days to get BTS peeks and to know when we launch!</p>
         <p class="signature">LivSimplifies</p>
       </div>
 
-      <!-- hidden flodesk form -->
-      <div id="flodesk-hidden">
-        <div id="fd-form-68f1f0138b74c8d741ecd499"></div>
-      </div>
-
     </div>
   </section>
 
-     <!-- Flodesk script -->
-  <script src="https://assets.flodesk.com/universal.js"></script>
-
+  <!-- Simple thank-you logic -->
   <script>
-    // Run when page finishes loading
-    window.addEventListener("load", () => {
+    const form = document.getElementById('waitlist-form');
+    const thankYou = document.getElementById('thank-you-message');
+    const heading = document.querySelector('h1');
+    const subtext = document.querySelector('.waitlist-subtext');
 
-      // --- 1️⃣ Safely initialise Flodesk after confirming it exists ---
-      function initFlodesk() {
-        if (window.fd && typeof window.fd === "function") {
-          console.log("✅ Flodesk initialised");
-          window.fd('form', {
-            formId: '68f1f0138b74c8d741ecd499',
-            containerEl: '#fd-form-68f1f0138b74c8d741ecd499'
-          });
-          return true;
-        }
-        return false;
-      }
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
 
-      let attempts = 0;
-      const flodeskReady = setInterval(() => {
-        attempts++;
-        if (initFlodesk() || attempts > 20) clearInterval(flodeskReady);
-      }, 500);
+      const data = new FormData(form);
 
-      // --- 2️⃣ Core elements ---
-      const form = document.getElementById('waitlist-form');
-      const thankYou = document.getElementById('thank-you-message');
-      const heading = document.querySelector('h1');
-      const subtext = document.querySelector('.waitlist-subtext');
-      thankYou.style.display = "none";
-
-      // --- 3️⃣ Handle form submit ---
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        const first = form.firstName.value.trim();
-        const email = form.email.value.trim();
-
-        // instantly show thank-you
-        heading.style.display = "none";
-        subtext.style.display = "none";
-        form.style.display = "none";
-        thankYou.style.display = "block";
-
-        // --- 4️⃣ Try sending into the hidden Flodesk iframe ---
-        let tries = 0;
-        const sendToFlodesk = setInterval(() => {
-          tries++;
-          const iframe = document.querySelector('#flodesk-hidden iframe');
-          if (!iframe) return;
-          const doc = iframe.contentDocument || iframe.contentWindow.document;
-          const emailField = doc.querySelector('input[type="email"]');
-          const nameField = doc.querySelector('input[name="name"], input[name="first_name"]');
-          const submitBtn = doc.querySelector('button, input[type="submit"]');
-          if (emailField && submitBtn) {
-            emailField.value = email;
-            if (nameField) nameField.value = first;
-            submitBtn.click();
-            console.log("✅ Sent to Flodesk:", email);
-            clearInterval(sendToFlodesk);
-          }
-          if (tries > 30) {
-            console.log("⚠️ Flodesk iframe not ready yet");
-            clearInterval(sendToFlodesk);
-          }
-        }, 500);
+      fetch(form.action, {
+        method: 'POST',
+        body: data,
+        mode: 'no-cors' // keeps it silent and compatible
+      })
+      .then(() => {
+        heading.style.display = 'none';
+        subtext.style.display = 'none';
+        form.style.display = 'none';
+        thankYou.style.display = 'block';
+      })
+      .catch(() => {
+        heading.style.display = 'none';
+        subtext.style.display = 'none';
+        form.style.display = 'none';
+        thankYou.style.display = 'block';
       });
     });
   </script>
