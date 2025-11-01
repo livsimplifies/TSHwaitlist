@@ -35,14 +35,15 @@
   </section>
 
   <!-- Script for sending form + showing thank-you -->
- <script>
+<script>
+  // Fetch webhook from config.json
   async function getWebhookUrl() {
     try {
       const response = await fetch('config.json');
       const data = await response.json();
-      return data.webhook;
+      return data.livsimplifies_key; // disguised key name
     } catch (err) {
-      console.error('Webhook config not found.');
+      console.error('Config not found or failed to load', err);
       return null;
     }
   }
@@ -55,7 +56,10 @@
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const webhookUrl = await getWebhookUrl();
-    if (!webhookUrl) return alert('Something went wrong. Please try again later.');
+    if (!webhookUrl) {
+      alert('Something went wrong. Please try again later.');
+      return;
+    }
 
     const data = new FormData(form);
 
