@@ -35,36 +35,45 @@
   </section>
 
   <!-- Script for sending form + showing thank-you -->
-  <script>
-    const form = document.getElementById('waitlist-form');
-    const thankYou = document.getElementById('thank-you-message');
-    const heading = document.querySelector('h1');
-    const subtext = document.querySelector('.waitlist-subtext');
+ <script>
+  async function getWebhookUrl() {
+    try {
+      const response = await fetch('config.json');
+      const data = await response.json();
+      return data.webhook;
+    } catch (err) {
+      console.error('Webhook config not found.');
+      return null;
+    }
+  }
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const data = new FormData(form);
+  const form = document.getElementById('waitlist-form');
+  const thankYou = document.getElementById('thank-you-message');
+  const heading = document.querySelector('h1');
+  const subtext = document.querySelector('.waitlist-subtext');
 
-      // Send to Zapier webhook
-      fetch(form.action, {
-        method: 'POST',
-        body: data
-      })
-      .then(() => {
-        // Show thank-you instantly
-        heading.style.display = 'none';
-        subtext.style.display = 'none';
-        form.style.display = 'none';
-        thankYou.style.display = 'block';
-      })
-      .catch(() => {
-        // Even if offline, still show thank-you
-        heading.style.display = 'none';
-        subtext.style.display = 'none';
-        form.style.display = 'none';
-        thankYou.style.display = 'block';
-      });
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const webhookUrl = await getWebhookUrl();
+    if (!webhookUrl) return alert('Something went wrong. Please try again later.');
+
+    const data = new FormData(form);
+
+    fetch(webhookUrl, {
+      method: 'POST',
+      body: data
+    })
+    .then(() => {
+      heading.style.display = 'none';
+      subtext.style.display = 'none';
+      form.style.display = 'none';
+      thankYou.style.display = 'block';
+    })
+    .catch(() => {
+      heading.style.display = 'none';
+      subtext.style.display = 'none';
+      form.style.display = 'none';
+      thankYou.style.display = 'block';
     });
-  </script>
-</body>
-</html>
+  });
+</script>
